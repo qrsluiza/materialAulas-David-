@@ -1,75 +1,54 @@
-create database hospital;
-use hospital;
+CREATE DATABASE hospital;
+USE hospital;
 
-CREATE TABLE medico (
-    crm INT,
-    especialidade VARCHAR(50),
+CREATE TABLE medico(
+	crm VARCHAR(20) PRIMARY KEY,
     nome VARCHAR(50),
-    PRIMARY KEY (crm)
+    esp VARCHAR(100)
 );
 
-CREATE TABLE ala (
-    id INT PRIMARY KEY,
+CREATE TABLE enfermeira(
+	cre VARCHAR(20) PRIMARY KEY,
+    nome VARCHAR(50),
+    FK_enf_chefe VARCHAR(20),
+    FOREIGN KEY(FK_enf_chefe) REFERENCES enfermeira(cre)
+);
+
+CREATE TABLE ala(
+	id INT PRIMARY KEY,
     nome VARCHAR(50)
 );
 
-CREATE TABLE quarto (
-    num INT PRIMARY KEY,
-    fk_ala_id INT,
-    id INT,
+CREATE TABLE quarto(
+	num INT PRIMARY KEY,
     andar INT,
-    FOREIGN KEY (fk_ala_id)
-        REFERENCES ala (id)
+    FK_ala_id INT,
+    FOREIGN KEY(FK_ala_id) REFERENCES ala(id)
 );
 
-CREATE TABLE paciente (
-    cpf INT,
+CREATE TABLE paciente(
+	cpf VARCHAR(11) PRIMARY KEY,
     nome VARCHAR(50),
-    fk_quarto_num INT,
-    FOREIGN KEY (fk_quarto_num)
-        REFERENCES quarto (num),
-    PRIMARY KEY (cpf),
-    saida varchar(50),
-    entrada varchar(50)
+    FK_quarto_num INT,
+    entrada DATE,
+    saida DATE,
+    FOREIGN KEY (FK_quarto_num) REFERENCES quarto(num)
 );
 
-CREATE TABLE enfermeira (
-    cre INT PRIMARY KEY,
-    fk_enfermeira_cre INT,
-    nome VARCHAR(50),
-    FOREIGN KEY (fk_enfermeira_cre)
-        REFERENCES enfermeira (cre)
-);
-
-CREATE TABLE MedPac (
-    fk_medico_crm INT,
-    fk_paciente_cpf INT,
-    FOREIGN KEY (fk_medico_crm)
-        REFERENCES medico (crm),
-    FOREIGN KEY (fk_paciente_cpf)
-        REFERENCES paciente (cpf)
-);
-
-CREATE TABLE EnfAla (
-    fk_enfermeira_cre INT,
-    fk_ala_id INT,
-    FOREIGN KEY (fk_enfermeira_cre)
-        REFERENCES enfermeira (cre),
-    FOREIGN KEY (fk_ala_id)
-        REFERENCES ala (id)
-);
-
-CREATE TABLE atendimento (
-    fk_medico_crm INT,
-    fk_paciente_cpf INT,
-    FOREIGN KEY (fk_medico_crm)
-        REFERENCES medico (crm),
-    FOREIGN KEY (fk_paciente_cpf)
-        REFERENCES paciente (cpf),
+CREATE TABLE medicopaciente(
+	FK_medico_crm VARCHAR(20),
+    FK_paciente_cpf VARCHAR(11),
     data DATE,
-    hora date
+    hora VARCHAR(5),
+    PRIMARY KEY(FK_medico_crm, FK_paciente_cpf),
+    FOREIGN KEY(FK_medico_crm) REFERENCES medico(crm),
+    FOREIGN KEY(FK_paciente_cpf) REFERENCES paciente(cpf)
 );
 
-
-
-
+CREATE TABLE enfermeiraala(
+	FK_enfermeira_cre VARCHAR(20),
+    FK_ala_id INT,
+    PRIMARY KEY(FK_enfermeira_cre, FK_ala_id),
+    FOREIGN KEY(FK_enfermeira_cre) REFERENCES enfermeira(cre),
+    FOREIGN KEY(FK_ala_id) REFERENCES ala(id)
+);

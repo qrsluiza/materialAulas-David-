@@ -1,45 +1,37 @@
-create database empresa;
-use empresa;
+CREATE DATABASE empresa;
+USE empresa;
 
-create table cliente (
-email varchar(30),
-nome varchar(50),
-
-primary key (email)
+CREATE TABLE cliente(
+	email VARCHAR(100),
+    nome VARCHAR(100),
+    PRIMARY KEY(email)
 );
 
-create table servico(
-cod int,
-nome varchar(50),
-
-primary key(cod)
+CREATE TABLE servico(
+	cod INT,
+    nome VARCHAR(100),
+    PRIMARY KEY(cod)
 );
 
-create table profissional(
-cod int,
-nome varchar(50),
-tel int,
-
-primary key(cod)
+CREATE TABLE profissional(
+	cod INT,
+    nome VARCHAR(100),
+    tel VARCHAR(11),
+    PRIMARY KEY(cod)
 );
 
-create table clienteservico(
-FK_servico_cod int,
-FK_cliente_email varchar(30),
-
-foreign key(FK_cliente_email) references cliente(email),
-foreign key(FK_servico_cod) references servico(cod)
-
-
+CREATE TABLE clienteservico(
+	FK_cliente_email VARCHAR(100),
+    FK_servico_cod INT,
+    PRIMARY KEY(FK_cliente_email, FK_servico_cod),
+    FOREIGN KEY(FK_cliente_email) REFERENCES cliente(email),
+    FOREIGN KEY(FK_servico_cod) REFERENCES servico(cod)
 );
 
-create table servicoprofissional(
-
-FK_sevico_cod int,
-FK_profissional_cod int,
-
-foreign key(FK_profissional_cod) references profissional(cod),
-foreign key(FK_servico_cod) references servico(cod)
-
-
+CREATE TABLE servicoprofissional(
+	FK_servico_cod INT,
+    FK_profissional_cod INT,
+    PRIMARY KEY(FK_servico_cod, FK_profissional_cod),
+    FOREIGN KEY(FK_servico_cod) REFERENCES servico(cod),
+    FOREIGN KEY(FK_profissional_cod) REFERENCES profissional(cod)
 );
